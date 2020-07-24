@@ -1,5 +1,6 @@
 package mrhart1ey.gomoku.game;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -49,9 +50,8 @@ public final class GomokuImpl implements Gomoku {
             } else {
                 board[row] = new PositionContent[SIZE];
 
-                for (int column = 0; column < SIZE; column++) {
-                    board[row][column] = boardToCopy.board[row][column];
-                }
+                System.arraycopy(boardToCopy.board[row], 0,
+                        board[row], 0, Gomoku.SIZE);
             }
         }
 
@@ -115,12 +115,12 @@ public final class GomokuImpl implements Gomoku {
 
         return new GomokuImpl(this, pos);
     }
-    
+
     @Override
     public GameState getGameState() {
         return state;
     }
-    
+
     @Override
     public PlayerName getCurrentTurn() {
         return currentTurn;
@@ -166,7 +166,7 @@ public final class GomokuImpl implements Gomoku {
                     = findMaxConsecutivePiecesOfTheSameColour(channel, placedPiece);
 
             if (maxConsecutivePiecesOfTheSameColour
-                    == Gomoku.CONSECUTIVE_PIECES_TO_WIN) {
+                    >= Gomoku.CONSECUTIVE_PIECES_TO_WIN) {
                 return true;
             }
         }
@@ -196,5 +196,32 @@ public final class GomokuImpl implements Gomoku {
 
     private static boolean canAnymorePiecesBeAdded(int pieceCount) {
         return pieceCount != Gomoku.SIZE * Gomoku.SIZE;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        final GomokuImpl objCasted = (GomokuImpl) obj;
+
+        /*
+        Only need to check the board's content, as the other fields currentTurn,
+        state, and pieceCount can all be derived from the boards content, 
+        and the rule that black goes first and then the turn to place a piece
+        switchs from player to player after each move. 
+         */
+        return Arrays.deepEquals(board, objCasted.board);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 43 * hash + Arrays.deepHashCode(board);
+        return hash;
     }
 }

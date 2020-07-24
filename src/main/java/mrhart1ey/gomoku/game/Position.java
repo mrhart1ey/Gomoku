@@ -12,10 +12,25 @@ public final class Position {
         this.row = row;
         this.column = column;
     }
-    
+
     @Override
     public String toString() {
         return "(" + row + ", " + column + ")";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        final Position other = (Position) obj;
+
+        return this.row == other.row && this.column == other.column;
     }
 
     @Override
@@ -25,21 +40,4 @@ public final class Position {
         hash = 11 * hash + this.column;
         return hash;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        
-        final Position other = (Position) obj;
-        
-        return this.row == other.row && this.column == other.column;
-    }
-    
-    
 }
