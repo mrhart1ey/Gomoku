@@ -14,6 +14,7 @@ import mrhart1ey.gomoku.player.Player;
 import mrhart1ey.gomoku.player.ai.GomokuBoardTrackingHeuristic;
 import mrhart1ey.gomoku.player.ai.PlayerAi;
 import mrhart1ey.gomoku.player.gui.GameDisplay;
+import mrhart1ey.gomoku.timer.DeactivatedGameTimer;
 import mrhart1ey.gomoku.timer.GameTimer;
 
 public class ComputerSessionConfigurationHandler implements Runnable {
@@ -48,14 +49,15 @@ public class ComputerSessionConfigurationHandler implements Runnable {
                 
                 Player otherPlayer = new PlayerAi(heuristic, myName.turnAfter());
 
-                GameTimer gameTimer = gameConfiguration.gameTimer;
+                DeactivatedGameTimer gameTimer = gameConfiguration.gameTimer;
 
                 PlayerHandler playerHandler = new BlankPlayerHandler();
 
-                GameMonitor gameMonitor = (b, t1, t2) -> {
+                GameMonitor gameMonitor = (b, hasMyTimerRanOut, 
+                        hasMyOpponentsTimerRanOut) -> {
                     return b.getGameState() == GameState.ONGOING
-                            && !t1.didTimeRunOut()
-                            && !t2.didTimeRunOut();
+                            && !hasMyTimerRanOut
+                            && !hasMyOpponentsTimerRanOut;
                 };
 
                 TurnIndicator turnIndicator = (a, b) -> {

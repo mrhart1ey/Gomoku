@@ -52,13 +52,15 @@ public final class GameConfigurationToString {
         } else if (gameTimer instanceof FixedTurnGameTimer) {
             FixedTurnGameTimer castedGameTimer = (FixedTurnGameTimer) gameTimer;
 
-            return "FIXED_TURN" + PARAMETER_SEPERATOR + castedGameTimer.getTimePerTurn();
+            return "FIXED_TURN" + PARAMETER_SEPERATOR + 
+                    castedGameTimer.getTimeLeft(null).toMillis();
         }else if(gameTimer instanceof StandardGameTimer) {
             StandardGameTimer castedGameTimer = (StandardGameTimer) gameTimer;
             
             return "STANDARD" + PARAMETER_SEPERATOR 
-                    + castedGameTimer.getInitialReserveTime() + PARAMETER_SEPERATOR 
-                    + castedGameTimer.getTimeAddedPerTurn();
+                    + castedGameTimer.getTimeLeft(null).toMillis()
+                    + PARAMETER_SEPERATOR 
+                    + castedGameTimer.getTimeAddedPerTurn().toMillis();
         }
         
         throw new IllegalArgumentException("Unknown type of timer");

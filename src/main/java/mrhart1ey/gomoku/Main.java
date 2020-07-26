@@ -5,7 +5,7 @@ import mrhart1ey.gomoku.player.gui.GameDisplayGui;
 import mrhart1ey.gomoku.game.PlayerName;
 import mrhart1ey.gomoku.game.Gomoku;
 import mrhart1ey.gomoku.player.Player;
-import mrhart1ey.gomoku.timer.GameTimer;
+import mrhart1ey.gomoku.timer.DeactivatedGameTimer;
 
 public class Main {
 
@@ -34,7 +34,7 @@ public class Main {
         
             PlayerName myName = sessionConfiguration.myName;
             
-            GameTimer timer = sessionConfiguration.timer;
+            DeactivatedGameTimer timer = sessionConfiguration.timer;
         
             GameMonitor gameMonitor = sessionConfiguration.gameMonitor;
                 

@@ -1,69 +1,52 @@
 package mrhart1ey.gomoku.timer;
 
-public class FixedTurnGameTimer implements GameTimer {
-    
-    private final Clock clock;
-    private final long creationTimeStamp;
-    private final long timeUnitsElapsed;
-    private final long timeUnitsPerTurn;
+import java.time.Duration;
+import java.time.Instant;
 
-    public FixedTurnGameTimer(Clock clock, long timeUnitsPerTurn) {
-        this(clock, clock.getTime(), 0, timeUnitsPerTurn);
-    }
-    
-    private FixedTurnGameTimer(Clock clock, long creationTimeStamp, 
-            long timeUnitsElapsed, long timeUnitsPerTurn) {
-        this.clock = clock;
-        this.creationTimeStamp = creationTimeStamp;
-        this.timeUnitsElapsed = timeUnitsElapsed;
-        this.timeUnitsPerTurn = timeUnitsPerTurn;
-    }
-    
-    @Override
-    public GameTimer startTimingMyTurn() {
-        return new FixedTurnGameTimer(clock, timeUnitsPerTurn);
-    }
+/**
+ * A game timer that gives the same length of time every time for each turn.
+ * 
+ * It does not matter how much time was on the timer before the timer was told to 
+ * stop timing the turn, the amount of time given for the new turn will always be the same.
+ */
+public final class FixedTurnGameTimer implements DeactivatedGameTimer {
+    private final Duration turnTime;
 
-    @Override
-    public GameTimer endTimingMyTurn() {
-        return new FixedTurnGameTimer(clock, timeUnitsPerTurn);
-    }
-    
-    @Override
-    public GameTimer tick() {
-        long timeUnitsElapsedForNewTimer = clock.getTime() - creationTimeStamp;
-        
-        return new FixedTurnGameTimer(clock, creationTimeStamp, 
-                timeUnitsElapsedForNewTimer, timeUnitsPerTurn);
-    }
-    
-    @Override
-    public long getTimeLeft() {
-        long result;
-        
-        long timeDifference = timeUnitsPerTurn - timeUnitsElapsed;
-        
-        if(timeDifference <= 0) {
-            result = 0;
-        }else {
-            result = timeDifference;
+    /**
+     * @param turnTime The amount of time that will be allowed for each turn
+     * @throws IllegalArgumentException If the turn time is not positive
+     */
+    public FixedTurnGameTimer(Duration turnTime) {
+        if(turnTime.isNegative() || turnTime.isZero()) {
+            throw new IllegalArgumentException("The turn time must be positive");
         }
         
-        return result;
+        this.turnTime = turnTime;
     }
 
     @Override
-    public boolean didTimeRunOut() {
-        return getTimeLeft() == 0;
+    public ActivatedGameTimer startTimingTurn(Instant timestamp) {
+        return new ActivatedFixedTurnGameTimer(turnTime, timestamp);
     }
 
+    @Override
+    public Duration getTimeLeft(Instant timeStamp) {
+        return turnTime;
+    }
+
+    @Override
+    public boolean didTimeRunOut(Instant timeStamp) {
+        return getTimeLeft(timeStamp).isZero();
+    }
+
+    /**
+     * If the amount of time given for a turn to be completed passes,
+     * then didTimeRunOut will return true.
+     * 
+     * @return True
+     */
     @Override
     public boolean isFinite() {
         return true;
     }
-    
-    public long getTimePerTurn() {
-        return timeUnitsPerTurn;
-    }
-    
 }

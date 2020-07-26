@@ -13,6 +13,9 @@ package mrhart1ey.gomoku.game;
  * 
  * All classes that implement this interface should be immutable, so if a change
  * is needed to be made to the board then a new instance of the board should be returned.
+ * 
+ * If the equals operator is overridden then it should return true only for instances
+ * of the same subclass.
  */
 public interface Gomoku {
     public static final int SIZE = 19;

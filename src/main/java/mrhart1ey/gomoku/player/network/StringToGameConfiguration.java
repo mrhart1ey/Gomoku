@@ -1,15 +1,14 @@
 package mrhart1ey.gomoku.player.network;
 
+import java.time.Duration;
 import mrhart1ey.gomoku.GameConfiguration;
 import mrhart1ey.gomoku.game.Gomoku;
 import mrhart1ey.gomoku.game.GomokuImpl;
 import mrhart1ey.gomoku.game.PlayerName;
-import mrhart1ey.gomoku.timer.Clock;
+import mrhart1ey.gomoku.timer.DeactivatedGameTimer;
 import mrhart1ey.gomoku.timer.FixedTurnGameTimer;
-import mrhart1ey.gomoku.timer.GameTimer;
 import mrhart1ey.gomoku.timer.InfiniteGameTimer;
 import mrhart1ey.gomoku.timer.StandardGameTimer;
-import mrhart1ey.gomoku.timer.SystemClock;
 
 public final class StringToGameConfiguration {
 
@@ -22,7 +21,8 @@ public final class StringToGameConfiguration {
 
         Gomoku board = convertGomoku(configurationParts[GameConfigurationToString.CONFIGURATION_INDEX_GOMOKU]);
 
-        GameTimer gameTimer = convertGameTimer(configurationParts[GameConfigurationToString.CONFIGURATION_INDEX_GAME_TIMER]);
+        DeactivatedGameTimer gameTimer = 
+                convertGameTimer(configurationParts[GameConfigurationToString.CONFIGURATION_INDEX_GAME_TIMER]);
 
         return new GameConfiguration(board, gameTimer, playerName);
     }
@@ -39,7 +39,7 @@ public final class StringToGameConfiguration {
         return new GomokuImpl();
     }
 
-    private GameTimer convertGameTimer(String gameTimer) {
+    private DeactivatedGameTimer convertGameTimer(String gameTimer) {
         if (gameTimer.startsWith("INFINITE")) {
             return new InfiniteGameTimer();
         } else if (gameTimer.startsWith("FIXED_TURN")) {
@@ -47,9 +47,7 @@ public final class StringToGameConfiguration {
                     = Long.parseLong(gameTimer.split(
                             GameConfigurationToString.PARAMETER_SEPERATOR)[1]);
 
-            Clock defaultClock = new SystemClock();
-
-            return new FixedTurnGameTimer(defaultClock, timePerTurn);
+            return new FixedTurnGameTimer(Duration.ofMillis(timePerTurn));
         }
 
         String[] parameters
@@ -61,8 +59,7 @@ public final class StringToGameConfiguration {
         long timeAddedPerTurn
                 = Long.parseLong(parameters[2]);
 
-        Clock defaultClock = new SystemClock();
-
-        return new StandardGameTimer(defaultClock, reserveTime, timeAddedPerTurn);
+        return new StandardGameTimer(Duration.ofMillis(reserveTime), 
+                Duration.ofMillis(timeAddedPerTurn));
     }
 }

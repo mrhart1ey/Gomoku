@@ -1,32 +1,68 @@
 package mrhart1ey.gomoku.timer;
 
-public class InfiniteGameTimer implements GameTimer {
+import java.time.Duration;
+import java.time.Instant;
 
+/**
+ * A timer that will never run out of time.
+ * 
+ * The passed in timestamps can be null, as they are never used
+ */
+public final class InfiniteGameTimer implements
+        ActivatedGameTimer, DeactivatedGameTimer {
+    
+    /**
+     * Creates a new infinite game timer
+     */
+    public InfiniteGameTimer() {
+        
+    }
+    
+    /**
+     * @param timestamp The current time
+     * @return An InfiniteGameTimer object
+     */
     @Override
-    public GameTimer startTimingMyTurn() {
-        return new InfiniteGameTimer();
+    public ActivatedGameTimer startTimingTurn(Instant timestamp) {
+        return this;
     }
 
+    /**
+     * @param timestamp The current time
+     * @return An InfiniteGameTimer object
+     */
     @Override
-    public GameTimer endTimingMyTurn() {
-        return new InfiniteGameTimer();
+    public DeactivatedGameTimer stopTimingTurn(Instant timestamp) {
+        return this;
     }
 
+    /**
+     * The returned duration would be infinite, so a UnsupportedOperationException
+     * exception is thrown
+     * 
+     * @param timestamp The current time
+     * @throws UnsupportedOperationException When called
+     * @return It will never return a value
+     */
     @Override
-    public GameTimer tick() {
-        return new InfiniteGameTimer();
+    public Duration getTimeLeft(Instant timestamp) {
+        throw new UnsupportedOperationException("Infinite time left");
     }
 
+    /**
+     * Time never runs out for this timer
+     * 
+     * @param timestamp The current time
+     * @return false
+     */
     @Override
-    public long getTimeLeft() {
-        return Integer.MAX_VALUE;
-    }
-
-    @Override
-    public boolean didTimeRunOut() {
+    public boolean didTimeRunOut(Instant timestamp) {
         return false;
     }
-
+    
+    /**
+     * @return false
+     */
     @Override
     public boolean isFinite() {
         return false;

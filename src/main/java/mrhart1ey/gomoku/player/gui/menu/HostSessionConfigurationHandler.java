@@ -12,6 +12,7 @@ import mrhart1ey.gomoku.game.PlayerName;
 import mrhart1ey.gomoku.player.Player;
 import mrhart1ey.gomoku.player.gui.GameDisplay;
 import mrhart1ey.gomoku.player.network.NetworkClientConnector;
+import mrhart1ey.gomoku.timer.DeactivatedGameTimer;
 import mrhart1ey.gomoku.timer.GameTimer;
 
 public class HostSessionConfigurationHandler implements Runnable {
@@ -47,14 +48,15 @@ public class HostSessionConfigurationHandler implements Runnable {
 
             Player otherPlayer = ncc.getOtherPlayer();
 
-            GameTimer gameTimer = gameConfiguration.gameTimer;
+            DeactivatedGameTimer gameTimer = gameConfiguration.gameTimer;
 
             PlayerHandler playerHandler = ncc.getPlayerHandler();
 
-            GameMonitor gameMonitor = (b, t1, t2) -> {
+            GameMonitor gameMonitor = (b, hasMyTimerRanOut, 
+                        hasMyOpponentsTimerRanOut) -> {
                 return b.getGameState() == GameState.ONGOING
-                        && !t1.didTimeRunOut()
-                        && !t2.didTimeRunOut()
+                        && !hasMyTimerRanOut
+                        && !hasMyOpponentsTimerRanOut
                         && playerHandler.isOpponentActive();
             };
 

@@ -5,6 +5,7 @@
  */
 package mrhart1ey.gomoku.player.gui.menu;
 
+import java.time.Duration;
 import java.util.Stack;
 import javax.swing.JComponent;
 import mrhart1ey.gomoku.GameConfiguration;
@@ -12,12 +13,11 @@ import mrhart1ey.gomoku.SingleTimePasser;
 import mrhart1ey.gomoku.game.Gomoku;
 import mrhart1ey.gomoku.game.GomokuImpl;
 import mrhart1ey.gomoku.game.PlayerName;
-import mrhart1ey.gomoku.timer.Clock;
+import mrhart1ey.gomoku.timer.DeactivatedGameTimer;
 import mrhart1ey.gomoku.timer.FixedTurnGameTimer;
 import mrhart1ey.gomoku.timer.GameTimer;
 import mrhart1ey.gomoku.timer.InfiniteGameTimer;
 import mrhart1ey.gomoku.timer.StandardGameTimer;
-import mrhart1ey.gomoku.timer.SystemClock;
 
 /**
  *
@@ -292,30 +292,19 @@ public class GameConfigurationMenuScreen extends javax.swing.JPanel {
 
         Gomoku board = new GomokuImpl();
 
-        GameTimer gameTimer;
+        DeactivatedGameTimer gameTimer;
 
         if (standard.isSelected()) {
             int reserveTimeInSeconds = (int) reserveTime.getValue();
-            int reserveTimeInMilliseconds
-                    = reserveTimeInSeconds * 1000;
 
             int timeAddedPerTurnInSeconds = (int) timeAddedPerTurn.getValue();
-            int timeAddedPerTurnInMilliseconds
-                    = timeAddedPerTurnInSeconds * 1000;
 
-            Clock defaultClock = new SystemClock();
-
-            gameTimer = new StandardGameTimer(defaultClock,
-                    reserveTimeInMilliseconds, timeAddedPerTurnInMilliseconds);
+            gameTimer = new StandardGameTimer(Duration.ofSeconds(reserveTimeInSeconds), 
+                    Duration.ofSeconds(timeAddedPerTurnInSeconds));
         } else if (fixedTurn.isSelected()) {
             int turnLengthInSeconds = (int) timePerTurn.getValue();
 
-            int turnLengthInMilliseconds = turnLengthInSeconds * 1000;
-
-            Clock defaultClock = new SystemClock();
-
-            gameTimer = new FixedTurnGameTimer(defaultClock,
-                    turnLengthInMilliseconds);
+            gameTimer = new FixedTurnGameTimer(Duration.ofSeconds(turnLengthInSeconds));
         } else {
             gameTimer = new InfiniteGameTimer();
         }

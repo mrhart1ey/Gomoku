@@ -1,6 +1,5 @@
 package mrhart1ey.gomoku.player.gui;
 
-import mrhart1ey.gomoku.player.gui.GameDisplay;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.util.List;
@@ -29,7 +28,7 @@ public class GameDisplayGui implements GameDisplay {
     private final TicTacToeComponent game;
     private final SingleTimePasser<Position> movePasser;
     private final MultiTimePasser<Position> positionMouseIsOver;
-    private final BlockingQueue<Boolean> newGameIndicator;
+    private final SingleTimePasser<Boolean> newGameIndicator;
 
     public GameDisplayGui() {
         frame = new JFrame("Gomoku");
@@ -44,7 +43,7 @@ public class GameDisplayGui implements GameDisplay {
         game = new TicTacToeComponent();
 
         movePasser = new SingleTimePasser<>();
-        newGameIndicator = new LinkedBlockingQueue<>();
+        newGameIndicator = new SingleTimePasser<>();
 
         MouseAdapter mouseListener = new TicTacToeMouseListener(movePasser,
                 passer, positionMouseIsOver);
@@ -74,6 +73,7 @@ public class GameDisplayGui implements GameDisplay {
         return positionMouseIsOver.get();
     }
 
+    @Override
     public void show() {
         if (!frame.isVisible()) {
             frame.setVisible(true);
@@ -112,7 +112,7 @@ public class GameDisplayGui implements GameDisplay {
 
     @Override
     public boolean hasPlayerAnsweredIfTheyWantANewGame() {
-        return !newGameIndicator.isEmpty();
+        return newGameIndicator.isObjectWaiting();
     }
 
     private static class Me implements Player {

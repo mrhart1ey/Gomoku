@@ -3,15 +3,16 @@ package mrhart1ey.gomoku.player.gui.drawjob;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 
 public class DrawJobTime implements DrawJob {
 
-    private final long myTimeLeft;
-    private final long opponentsTimeLeft;
+    private final Duration myTimeLeft;
+    private final Duration opponentsTimeLeft;
 
-    public DrawJobTime(long myTimeLeft, long opponentsTimeLeft) {
+    public DrawJobTime(Duration myTimeLeft, Duration opponentsTimeLeft) {
         this.myTimeLeft = myTimeLeft;
         this.opponentsTimeLeft = opponentsTimeLeft;
     }
@@ -20,8 +21,8 @@ public class DrawJobTime implements DrawJob {
     public void draw(Graphics2D g2) {
         Rectangle bounds = g2.getClipBounds();
 
-        String myTimeLeftText = Long.toString(myTimeLeft / 1000);
-        String opponentsTimeLeftText = Long.toString(opponentsTimeLeft / 1000);
+        String myTimeLeftText = Long.toString(myTimeLeft.toSeconds());
+        String opponentsTimeLeftText = Long.toString(opponentsTimeLeft.toSeconds());
 
         Collection<String> texts
                 = List.of(myTimeLeftText, opponentsTimeLeftText);

@@ -198,6 +198,19 @@ public final class GomokuImpl implements Gomoku {
         return pieceCount != Gomoku.SIZE * Gomoku.SIZE;
     }
 
+    /**
+     * Compares the board and the passed in object for equality.
+     * 
+     * Two boards are equal if the content of the boards is the same. 
+     * Whose turn it is does not matter as for the same board content it will 
+     * always be the same players turn. 
+     * 
+     * The passed in object must be an instance of GomokuImpl, any other class
+     * will make the method return false.
+     * 
+     * @param obj The object to compare the board to
+     * @return True if the board equals obj, false if not
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
