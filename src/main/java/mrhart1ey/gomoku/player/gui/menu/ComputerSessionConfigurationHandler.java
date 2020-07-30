@@ -11,11 +11,10 @@ import mrhart1ey.gomoku.game.GameState;
 import mrhart1ey.gomoku.game.Gomoku;
 import mrhart1ey.gomoku.game.PlayerName;
 import mrhart1ey.gomoku.player.Player;
-import mrhart1ey.gomoku.player.ai.GomokuBoardTrackingHeuristic;
+import mrhart1ey.gomoku.player.ai.GomokuHeuristicImpl;
 import mrhart1ey.gomoku.player.ai.PlayerAi;
 import mrhart1ey.gomoku.player.gui.GameDisplay;
 import mrhart1ey.gomoku.timer.DeactivatedGameTimer;
-import mrhart1ey.gomoku.timer.GameTimer;
 
 public class ComputerSessionConfigurationHandler implements Runnable {
     private final SingleTimePasser<SessionConfiguration> sessionConfigPasser;
@@ -42,12 +41,15 @@ public class ComputerSessionConfigurationHandler implements Runnable {
 
                 Gomoku board = gameConfiguration.board;
 
-                GomokuBoardTrackingHeuristic heuristic
-                        = new GomokuBoardTrackingHeuristic(board);
-
-                board = heuristic.newTrackedBoard();
+                GomokuHeuristicImpl heuristic1
+                        = new GomokuHeuristicImpl(board, myName.turnAfter());
                 
-                Player otherPlayer = new PlayerAi(heuristic, myName.turnAfter());
+                GomokuHeuristicImpl heuristic2
+                        = new GomokuHeuristicImpl(board, myName);
+                
+                //Player me = new PlayerAi(heuristic2, board);
+                
+                Player otherPlayer = new PlayerAi(heuristic1, board);
 
                 DeactivatedGameTimer gameTimer = gameConfiguration.gameTimer;
 

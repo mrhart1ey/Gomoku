@@ -5,6 +5,24 @@ import mrhart1ey.gomoku.game.Gomoku;
 import mrhart1ey.gomoku.game.PlayerName;
 import mrhart1ey.gomoku.game.PositionContent;
 
+/**
+ * A region is an area of the board that it is possible for a player to win the game with.
+ * 
+ * As a region is an area of the board that it is possible for a player to 
+ * win the game with, it means that a region can only contain pieces of one colour,
+ * but they can also contain free positions. 
+ * 
+ * A region's size is the number of pieces needed to win the game.
+ * 
+ * A region has an owner, who is a player of the game.
+ * 
+ * A regions piece count is the number of the owner's pieces in the region.
+ * 
+ * The open end count of a region can be 0, 1, or 2. If it is 2 then the region
+ * is open ended, so there are free positions at either side. If it is 1 then
+ * it is called partially open, so there is one free position at one end. If it
+ * is 0 then it is closed, there are no free positions at any end. 
+ */
 final class Region {
     public static final int MAX_REGION_SIZE = 
             Gomoku.CONSECUTIVE_PIECES_TO_WIN;
@@ -14,6 +32,10 @@ final class Region {
     private final PlayerName owner;
     private final int pieceCount;
 
+    /**
+     * @param contents The 
+     * @param openEndCount 
+     */
     Region(List<PositionContent> contents, int openEndCount) {
         if(contents.size() != MAX_REGION_SIZE) {
             throw new IllegalArgumentException("A region should be of size " 

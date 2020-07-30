@@ -13,53 +13,50 @@ import mrhart1ey.gomoku.game.Position;
 import mrhart1ey.gomoku.game.Gomoku;
 import mrhart1ey.gomoku.game.PositionContent;
 
-public class GomokuBoardTrackingHeuristic implements GomokuHeuristic {
-    
-    private final long score;
+/**
+ * Scores a Gomoku board.
+ */
+public final class GomokuHeuristicImpl implements GomokuHeuristic {
     private final Gomoku scoredBoard;
+    private final PlayerName forPlayer;
+    private final long score;
 
-    public GomokuBoardTrackingHeuristic(Gomoku initialBoard) {
-        this(initialBoard, 0);
+    /**
+     * @param initialBoard The initial board
+     * @param forPlayer The perspective that the scoring is done from
+     */
+    public GomokuHeuristicImpl(Gomoku initialBoard, PlayerName forPlayer) {
+        this(initialBoard, forPlayer, 0);
     }
 
-    private GomokuBoardTrackingHeuristic(Gomoku board, long score) {
+    private GomokuHeuristicImpl(Gomoku board, PlayerName forPlayer, 
+            long score) {
         this.scoredBoard = board;
+        this.forPlayer = forPlayer;
         this.score = score;
     }
 
     @Override
-    public GomokuHeuristic evaluate(Gomoku newBoard, PlayerName forPlayer) {
-        if (!(newBoard instanceof GomokuMoveTracker)) {
-            throw new IllegalArgumentException("To use this heuristic the board's "
-                    + "moves must be tracked.");
-        }
-
-        GomokuMoveTracker trackedBoard = (GomokuMoveTracker) newBoard;
-
-        Collection<Position> moves = trackedBoard.difference(scoredBoard);
+    public GomokuHeuristic evaluate(Gomoku newBoard, Set<Position> difference) {
+        long oldBoardScoreAroundMoves = scoreAroundPositions(scoredBoard,
+                difference);
         
-        long oldBoardScoreAroundMoves = scoreAroundPositions(scoredBoard, forPlayer, 
-                moves);
         long newBoardScoreAroundMoves = scoreAroundPositions(newBoard, 
-                forPlayer, moves);
+                difference);
 
         long scoreForNewBoard = score + (newBoardScoreAroundMoves
                 - oldBoardScoreAroundMoves);
 
-        return new GomokuBoardTrackingHeuristic(newBoard, scoreForNewBoard);
+        return new GomokuHeuristicImpl(newBoard, forPlayer, 
+                scoreForNewBoard);
     }
 
     @Override
     public long getScore() {
         return score;
     }
-    
-    public Gomoku newTrackedBoard() {
-        return new GomokuMoveTracker(scoredBoard);
-    }
 
-    private long scoreAroundPositions(Gomoku board, PlayerName forPlayer, 
-            Collection<Position> moves) {
+    private long scoreAroundPositions(Gomoku board, Collection<Position> moves) {
         Set<Tuple<Position, Direction>> startOfRegions = new HashSet<>();
 
         for (Position move : moves) {

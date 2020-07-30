@@ -30,7 +30,7 @@ public class Main {
         
             Player me = sessionConfiguration.me;
         
-            Player otherPlayer = sessionConfiguration.otherPlayer;
+            Player opponent = sessionConfiguration.otherPlayer;
         
             PlayerName myName = sessionConfiguration.myName;
             
@@ -40,8 +40,11 @@ public class Main {
                 
             TurnIndicator turnIndicator = sessionConfiguration.turnIndicator;
             
-            GameRunner gameRunner = new GameRunnerImpl(board, me, otherPlayer, 
-                    timer, gameMonitor, turnIndicator, display);
+            MoveRetriever moveRetriever = new MoveRetriever(me,  opponent, myName);
+            moveRetriever.start();
+            
+            GameRunner gameRunner = new GameRunnerImpl(board, timer, gameMonitor, 
+                    turnIndicator, display, moveRetriever);
             
             PostGameMenu postGameMenu = new PostGameMenuImpl(display, handler);
             
@@ -55,6 +58,8 @@ public class Main {
             }while(shouldStartANewGame);
 
             handler.stop();
+            
+            moveRetriever.stop();
             
             display.stopShowing();
             

@@ -2,7 +2,8 @@ package mrhart1ey.gomoku.player.ai;
 
 import java.util.Objects;
 
-class Tuple<V1, V2> {
+// A class to hold two values together
+final class Tuple<V1, V2> {
     public final V1 value1;
     public final V2 value2;
 
