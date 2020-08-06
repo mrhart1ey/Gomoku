@@ -1,5 +1,6 @@
-package mrhart1ey.gomoku.player.network;
+package mrhart1ey.gomoku.player.network.protocol;
 
+import mrhart1ey.gomoku.player.network.protocol.GameConfigurationToString;
 import java.time.Duration;
 import mrhart1ey.gomoku.GameConfiguration;
 import mrhart1ey.gomoku.game.Gomoku;

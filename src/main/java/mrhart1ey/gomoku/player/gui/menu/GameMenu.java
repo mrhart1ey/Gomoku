@@ -31,6 +31,7 @@ public class GameMenu {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setLocationRelativeTo(null);
         window.setResizable(false);
+        window.setTitle("Gomoku");
 
         Stack<JComponent> menuScreenHistory = new Stack<>();
 

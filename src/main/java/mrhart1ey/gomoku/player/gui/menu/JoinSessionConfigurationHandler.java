@@ -1,5 +1,6 @@
 package mrhart1ey.gomoku.player.gui.menu;
 
+import java.io.IOException;
 import mrhart1ey.gomoku.GameConfiguration;
 import mrhart1ey.gomoku.GameMonitor;
 import mrhart1ey.gomoku.PlayerHandler;
@@ -11,9 +12,8 @@ import mrhart1ey.gomoku.game.Gomoku;
 import mrhart1ey.gomoku.game.PlayerName;
 import mrhart1ey.gomoku.player.Player;
 import mrhart1ey.gomoku.player.gui.GameDisplay;
-import mrhart1ey.gomoku.player.network.NetworkServerConnector;
+import mrhart1ey.gomoku.player.network.NetworkServerConnection;
 import mrhart1ey.gomoku.timer.DeactivatedGameTimer;
-import mrhart1ey.gomoku.timer.GameTimer;
 
 public class JoinSessionConfigurationHandler implements Runnable {
 
@@ -34,10 +34,10 @@ public class JoinSessionConfigurationHandler implements Runnable {
         try {
             String hostAddress = hostPasser.take();
 
-            NetworkServerConnector nsc
-                    = new NetworkServerConnector(hostAddress);
+            NetworkServerConnection nsc = 
+                    NetworkServerConnection.waitForServer(hostAddress);
 
-            GameConfiguration gameConfiguration = nsc.start();
+            GameConfiguration gameConfiguration = nsc.getGameConfiguration();
 
             PlayerName myName = gameConfiguration.myName;
 
@@ -45,7 +45,7 @@ public class JoinSessionConfigurationHandler implements Runnable {
 
             Gomoku board = gameConfiguration.board;
 
-            Player otherPlayer = nsc.getOtherPlayer();
+            Player otherPlayer = nsc.getOpponent();
 
             DeactivatedGameTimer gameTimer = gameConfiguration.gameTimer;
 
@@ -70,6 +70,8 @@ public class JoinSessionConfigurationHandler implements Runnable {
             sessionConfigPasser.put(config);
         } catch (InterruptedException ex) {
             
+        }catch(IOException ex) {
+            System.out.println(ex);
         }
     }
 

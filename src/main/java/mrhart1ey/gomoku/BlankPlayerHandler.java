@@ -13,7 +13,7 @@ public final class BlankPlayerHandler implements PlayerHandler {
     }
 
     @Override
-    public void tellTheOpponentIfAnotherGameIsWanted(boolean arg0) {
+    public void tellTheOpponentIfIWantAnotherGame(boolean arg0) {
         
     }
 

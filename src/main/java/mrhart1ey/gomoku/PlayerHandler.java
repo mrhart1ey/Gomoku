@@ -10,7 +10,7 @@ public interface PlayerHandler {
     
     public boolean doesOpponentWantAnotherGame();
     
-    public void tellTheOpponentIfAnotherGameIsWanted(boolean anotherGame);
+    public void tellTheOpponentIfIWantAnotherGame(boolean anotherGame);
     
     public boolean isOpponentActive();
 }

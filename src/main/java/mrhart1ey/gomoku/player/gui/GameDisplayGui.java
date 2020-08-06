@@ -3,8 +3,6 @@ package mrhart1ey.gomoku.player.gui;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import javax.swing.JFrame;
 import mrhart1ey.gomoku.MultiTimePasser;
 import mrhart1ey.gomoku.SingleTimePasser;
@@ -90,7 +88,7 @@ public class GameDisplayGui implements GameDisplay {
      *
      * @return True if the player wants a new game, false otherwise
      */
-    public boolean doesPlayerWantANewGame() {
+    public boolean hasSpaceBarBeenPressed() {
         boolean result = false;
 
         try {
@@ -111,8 +109,13 @@ public class GameDisplayGui implements GameDisplay {
     }
 
     @Override
-    public boolean hasPlayerAnsweredIfTheyWantANewGame() {
+    public boolean hasEscapeKeyBeenPressed() {
         return newGameIndicator.isObjectWaiting();
+    }
+
+    @Override
+    public void clearKeyPresses() {
+        newGameIndicator.clear();
     }
 
     private static class Me implements Player {

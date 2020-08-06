@@ -46,4 +46,8 @@ public class SingleTimePasser<T> {
     public T take() throws InterruptedException {
         return impl.take();
     }
+    
+    public void clear() {
+        impl.clear();
+    }
 }

@@ -59,7 +59,7 @@ public class GameRunnerImpl implements GameRunner {
 
         while (gameMonitor.shouldKeepPlaying(board, activeTimer.didTimeRunOut(currentInstant),
                 dormantTimer.didTimeRunOut(currentInstant))) {
-
+            
             if (moveRetriever.isAMoveAvaliable()) {
                 try {
                     Position move = moveRetriever.retrieveMove();
@@ -117,6 +117,8 @@ public class GameRunnerImpl implements GameRunner {
             currentInstant = clock.instant();
         }
 
+        display.clearKeyPresses();
+        
         return board;
     }
 

@@ -54,10 +54,10 @@ public class PostGameMenuImpl implements PostGameMenu {
            
            if(playerHandler.isOpponentActive()) {
                drawJobs.add(new DrawJobEndInstructions("Space", "Escape"));
-               if(display.hasPlayerAnsweredIfTheyWantANewGame()) {
-                   boolean doIWantANewGame = display.doesPlayerWantANewGame();
+               if(display.hasEscapeKeyBeenPressed()) {
+                   boolean doIWantANewGame = display.hasSpaceBarBeenPressed();
                 
-                   playerHandler.tellTheOpponentIfAnotherGameIsWanted(doIWantANewGame);
+                   playerHandler.tellTheOpponentIfIWantAnotherGame(doIWantANewGame);
         
                    boolean doesOpponentWantAnotherGame = true;
         
@@ -73,8 +73,8 @@ public class PostGameMenuImpl implements PostGameMenu {
                }
            }else  {
                drawJobs.add(new DrawJobOpponentLeft("Escape"));
-               if(display.hasPlayerAnsweredIfTheyWantANewGame() && 
-                       !display.doesPlayerWantANewGame()) {
+               if(display.hasEscapeKeyBeenPressed() && 
+                       !display.hasSpaceBarBeenPressed()) {
                    answered = true;
                }
            }

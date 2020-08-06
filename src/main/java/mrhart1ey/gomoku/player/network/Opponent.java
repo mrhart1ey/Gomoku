@@ -8,52 +8,46 @@ import mrhart1ey.gomoku.game.Position;
 import mrhart1ey.gomoku.game.Gomoku;
 import mrhart1ey.gomoku.player.Player;
 
-final class Me implements Player {
-
-    private final Player input;
+final class Opponent implements Player {
 
     private final SingleTimePasser<Position> movePasser;
     private final SingleTimePasser<Gomoku> boardPasser;
     private final SingleTimePasser<Boolean> gameInProgress;
 
     private final CyclicBarrier barrier;
-
+    
     private final Lock moveRetrieverLock;
-
-    public Me(Player input, SingleTimePasser<Position> movePasser,
+    
+    public Opponent(SingleTimePasser<Position> movePasser,
             SingleTimePasser<Gomoku> boardPasser,
             SingleTimePasser<Boolean> gameInProgress,
             CyclicBarrier barrier,
             Lock moveRetrieverLock) {
 
-        this.input = input;
-
         this.movePasser = movePasser;
         this.boardPasser = boardPasser;
         this.gameInProgress = gameInProgress;
-
+        
         this.barrier = barrier;
-
+        
         this.moveRetrieverLock = moveRetrieverLock;
     }
 
     @Override
     public Position nextMove(Gomoku board) {
+        Position move = null;
+
         moveRetrieverLock.lock();
-
-        Position move = input.nextMove(board);
-
-        if (move != null) {
-            movePasser.put(move);
+        
+        try {
             boardPasser.put(board);
             gameInProgress.put(true);
-        }
-
-        try {
+            move = movePasser.take();
+            
             barrier.await();
         } catch (InterruptedException | BrokenBarrierException ex) {
             System.out.println(ex);
-        } finally {
+        }finally {
             moveRetrieverLock.unlock();
         }
 

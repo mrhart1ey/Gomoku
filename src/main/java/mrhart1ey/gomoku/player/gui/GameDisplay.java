@@ -26,7 +26,9 @@ public interface GameDisplay {
     
     public void show();
     
-    public boolean doesPlayerWantANewGame();
+    public boolean hasSpaceBarBeenPressed();
     
-    public boolean hasPlayerAnsweredIfTheyWantANewGame();
+    public boolean hasEscapeKeyBeenPressed();
+    
+    public void clearKeyPresses();
 }

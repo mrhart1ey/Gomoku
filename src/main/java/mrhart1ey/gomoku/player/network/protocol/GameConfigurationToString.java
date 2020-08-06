@@ -1,4 +1,4 @@
-package mrhart1ey.gomoku.player.network;
+package mrhart1ey.gomoku.player.network.protocol;
 
 import mrhart1ey.gomoku.GameConfiguration;
 import mrhart1ey.gomoku.game.Gomoku;
@@ -10,7 +10,7 @@ import mrhart1ey.gomoku.timer.StandardGameTimer;
 
 public final class GameConfigurationToString {
 
-    static final String CONFIGURATION_SEPERATOR = ";";
+    static final String CONFIGURATION_SEPERATOR = ":";
     static final String PARAMETER_SEPERATOR = ",";
     
     static final int CONFIGURATION_INDEX_MY_NAME = 0;
